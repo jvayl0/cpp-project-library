@@ -2,10 +2,10 @@
 
 #include "User.hpp"
 
-class Admin : public User {
+class Client : public User {
 public:
-    Admin(const char* username, const char* password);
-
+    Client(const char* username, const char* password);
+    
     bool isAdmin() const override;
     User* clone() const override;
 };

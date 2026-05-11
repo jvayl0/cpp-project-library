@@ -15,23 +15,22 @@ private:
     char** keywords;
     int keywordsCount;
 
-    void copyFrom(const Book& other);
-    void moveFrom(Book&& other);
+    void swap(Book& other) noexcept;
     void free();
     
 public:
     Book();
-
     Book(unsigned id, const char* author, const char* title, 
          const char* genre, const char* description, unsigned year, 
          double rating, char** keywords, int keywordsCount);
 
     Book(const Book& other);
-    Book& operator=(const Book& other);
-
     Book(Book&& other) noexcept;
-    Book& operator=(Book&& other) noexcept;
 
+    // Един operator= за copy И move, other се конструира по стойност — 
+    // ако подадем lvalue, се извиква copy ctor; ако подадем rvalue, се извиква move ctor. 
+    // Универсално и exception-safe!
+    Book& operator=(Book other);
     ~Book();
 
     //getters
