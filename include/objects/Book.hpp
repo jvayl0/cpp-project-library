@@ -18,9 +18,7 @@ private:
     void copyFrom(const Book& other);
     void moveFrom(Book&& other);
     void free();
-
-    // IZPOLZVAI SWAP METODA VMESTO COPY!!!!
-
+    
 public:
     Book();
 
