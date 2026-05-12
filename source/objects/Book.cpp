@@ -94,3 +94,16 @@ Book::Book(const Book& other){
         keywords = nullptr;
     }
 }
+
+Book::Book(Book&& other) noexcept : Book() {
+    swap(other);
+}
+
+Book& Book::operator=(Book other) {
+    swap(other);
+    return *this;
+}
+
+Book::~Book() {
+    free();
+}
