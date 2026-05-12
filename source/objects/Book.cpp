@@ -9,6 +9,15 @@ namespace {
         first = second;
         second = temp;
     }
+
+    char* copyString(const char* str) {
+        if(!str) return nullptr;
+
+        char* result = new char[strlen(str) + 1];
+        strcpy(result, str);
+
+        return result;
+    }
 }
 
 // PRIVATE METHODS
@@ -42,3 +51,16 @@ void Book::free(){
     keywords = nullptr;
     keywordsCount = 0;
 }
+
+// CONSTRUCTORS AND DESTRUCTOR
+Book::Book() : id(0), author(nullptr), title(nullptr), genre(nullptr), description(nullptr),
+               year(0), rating(0.0), keywords(nullptr), keywordsCount(0) {}
+
+Book::Book(unsigned id, const char* author, const char* title, const char* genre,
+           const char* description, unsigned year, double rating, 
+           char** keywords, int keywordsCount) :
+           id(id), year(year), rating(rating), keywordsCount(keywordsCount) {
+
+           
+}
+
