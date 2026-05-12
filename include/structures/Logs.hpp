@@ -13,5 +13,9 @@ private:
     void free();
 
 public:
-    
+    Logs();
+    Logs(const Logs& other);
+    Logs(Logs&& other) noexcept;
+    Logs& operator=(Logs other);
+    ~Logs();
 };
