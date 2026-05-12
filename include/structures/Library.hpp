@@ -23,5 +23,11 @@ public:
     Library& operator=(Library other);
 
     ~Library();
+
+    // getters
+    const Book* getBooks() const;
+
+    unsigned getSize() const;
+    unsigned getCapacity() const;
 };
 
