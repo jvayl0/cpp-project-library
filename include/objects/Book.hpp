@@ -15,7 +15,7 @@ private:
     char** keywords;
     int keywordsCount;
 
-    void swap(Book& other) noexcept;
+    void copyFrom(const Book& other);
     void free();
     
 public:
@@ -25,8 +25,7 @@ public:
          double rating, char** keywords, int keywordsCount);
 
     Book(const Book& other);
-    Book(Book&& other) noexcept;
-    Book& operator=(Book other);
+    Book& operator=(const Book& other);
     ~Book();
 
     unsigned getId() const;

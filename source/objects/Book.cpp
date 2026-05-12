@@ -1,15 +1,8 @@
-#include "Book.hpp"
+#include "objects/Book.hpp"
 #include <cstring>
 
 // HELPERS
 namespace {
-    template <typename T>
-    void mySwap(T& first, T& second){
-        T temp = first;
-        first = second;
-        second = temp;
-    }
-
     char* copyString(const char* str) {
         if(!str) return nullptr;
 
@@ -21,16 +14,25 @@ namespace {
 }
 
 // PRIVATE METHODS
-void Book::swap(Book& other) noexcept {
-    mySwap(id, other.id);
-    mySwap(author, other.author);
-    mySwap(title, other.title);
-    mySwap(genre, other.genre);
-    mySwap(description, other.description);
-    mySwap(year, other.year);
-    mySwap(rating, other.rating);
-    mySwap(keywords, other.keywords);
-    mySwap(keywordsCount, other.keywordsCount);
+void Book::copyFrom(const Book& other) {
+    id = other.id;
+    year = other.year;
+    rating = other.rating;
+    keywordsCount = other.keywordsCount;
+
+    author = copyString(other.author);
+    title = copyString(other.title);
+    genre = copyString(other.genre);
+    description = copyString(other.description);
+
+    if(keywordsCount > 0){
+        keywords = new char*[keywordsCount];
+        for(size_t i = 0; i < keywordsCount; i++){
+            keywords[i] = copyString(other.keywords[i]);
+        }
+    } else {
+        keywords = nullptr;
+    }
 }
 
 void Book::free(){
@@ -39,10 +41,12 @@ void Book::free(){
     delete[] genre;
     delete[] description;
     
+    if(keywords){
     for(size_t i = 0; i < keywordsCount; i++){
         delete[] keywords[i];
     }
     delete[] keywords;
+    }
 
     author = nullptr;
     title = nullptr;
@@ -63,6 +67,7 @@ Book::Book(unsigned id, const char* author, const char* title, const char* genre
 
            this->author = copyString(author);
            this->title = copyString(title);
+           this->genre = copyString(genre);
            this->description = copyString(description);
 
            if(keywordsCount > 0){
@@ -76,31 +81,14 @@ Book::Book(unsigned id, const char* author, const char* title, const char* genre
 }
 
 Book::Book(const Book& other){
-    id = other.id;
-    year = other.year;
-    rating = other.rating;
-    keywordsCount = other.keywordsCount;
+    copyFrom(other);
+}
 
-    author = copyString(other.author);
-    title = copyString(other.title);
-    description = copyString(other.description);
-
-    if(keywordsCount > 0){
-        keywords = new char*[keywordsCount];
-        for(size_t i = 0; i < keywordsCount; i++){
-            keywords[i] = copyString(other.keywords[i]);
-        }
-    } else {
-        keywords = nullptr;
+Book& Book::operator=(const Book& other){
+    if(this != &other){
+        free();
+        copyFrom(other);
     }
-}
-
-Book::Book(Book&& other) noexcept : Book() {
-    swap(other);
-}
-
-Book& Book::operator=(Book other) {
-    swap(other);
     return *this;
 }
 
