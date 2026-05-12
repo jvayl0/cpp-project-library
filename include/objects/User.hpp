@@ -14,11 +14,9 @@ public:
     User(User&& other) noexcept;
     virtual ~User();
 
-    // getters
     const char* getUsername() const;
     const char* getPassword() const;
 
-    // setters
     void setUsername(const char* username);
     void setPassword(const char* password);
 
