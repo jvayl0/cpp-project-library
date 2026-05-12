@@ -61,6 +61,17 @@ Book::Book(unsigned id, const char* author, const char* title, const char* genre
            char** keywords, int keywordsCount) :
            id(id), year(year), rating(rating), keywordsCount(keywordsCount) {
 
-           
+           this->author = copyString(author);
+           this->title = copyString(title);
+           this->description = copyString(description);
+
+           if(keywordsCount > 0){
+                this->keywords = new char*[keywordsCount];
+                for(size_t i = 0; i < keywordsCount; i++){
+                    this->keywords[i] = copyString(keywords[i]);
+                }
+        }   else {
+                this->keywords = nullptr;
+           }
 }
 
