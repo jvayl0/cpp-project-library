@@ -11,4 +11,5 @@ public:
 
     virtual bool isAdmin() const = 0;
     const char* getUsername() const;
+    bool checkPassword(const char* pass) const;
 };
