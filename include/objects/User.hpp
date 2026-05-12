@@ -11,14 +11,17 @@ protected:
 public:
     User(const char* username, const char* password);
     User(const User& other);
-    User& operator=(const User& other);
+    User(User&& other) noexcept;
+    virtual ~User();
 
-    virtual bool isAdmin() const = 0;
-
+    // getters
     const char* getUsername() const;
     const char* getPassword() const;
 
-    // deep copy
+    // setters
+    void setUsername(const char* username);
+    void setPassword(const char* password);
+
+    virtual bool isAdmin() const = 0;
     virtual User* clone() const = 0;
-    virtual ~User();
 };
