@@ -29,17 +29,17 @@ public:
     Book& operator=(Book other);
     ~Book();
 
-    int getId() const;
+    unsigned getId() const;
     const char* getAuthor() const;
     const char* getTitle() const;
     const char* getGenre() const;
     const char* getDescription() const;
-    int getYear() const;
+    unsigned getYear() const;
     double getRating() const;
     const char* const* getKeywords() const;
     int getKeywordsCount() const;
 
-    void setId(int id);
+    void setId(unsigned id);
     void setAuthor(const char* author);
     void setTitle(const char* title);
     void setGenre(const char* genre);

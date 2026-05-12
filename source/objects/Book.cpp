@@ -107,3 +107,52 @@ Book& Book::operator=(Book other) {
 Book::~Book() {
     free();
 }
+
+// GETTERS
+unsigned Book::getId() const { return id; }
+const char* Book::getAuthor() const { return author ;}
+const char* Book::getTitle() const { return title; }
+const char* Book::getGenre() const { return genre; }
+const char* Book::getDescription() const { return description; }
+unsigned Book::getYear() const { return year; }
+double Book::getRating() const { return rating; }
+const char* const* Book::getKeywords() const { return keywords; }
+int Book::getKeywordsCount() const {return keywordsCount; }
+
+// SETTERS
+void Book::setId(unsigned id) { this->id = id; }
+void Book::setAuthor(const char* author) {
+    delete[] this->author;
+    this->author = copyString(author);
+}
+void Book::setTitle(const char* title) {
+    delete[] this->title;
+    this->title = copyString(title);
+}
+void Book::setGenre(const char* genre) {
+    delete[] this->genre;
+    this->genre = copyString(genre);
+}
+void Book::setDescription(const char* description) {
+    delete[] this->description;
+    this->description = copyString(description);
+}
+void Book::setYear(unsigned year) { this->year = year; }
+void Book::setRating(double rating) { this->rating = rating; }
+
+void Book::setKeywords(char** keywords, int keywordsCount) {
+    for(size_t i = 0; i < this->keywordsCount; i++){
+        delete[] this->keywords[i];
+    }
+    delete[] this->keywords;
+
+    this->keywordsCount = keywordsCount;
+    if(keywordsCount > 0){
+        this->keywords = new char*[keywordsCount];
+        for(size_t i = 0; i < keywordsCount; i++){
+            this->keywords[i] = copyString(keywords[i]);
+        }
+    } else {
+        this->keywords = nullptr;
+    }
+}
