@@ -15,18 +15,12 @@ private:
 
 public:
     Library();
-    
     Library(const Library& other);
     Library(Library&& other) noexcept;
-
-    // Един operator= за copy и move
     Library& operator=(Library other);
-
     ~Library();
 
-    // getters
     const Book* getBooks() const;
-
     unsigned getSize() const;
     unsigned getCapacity() const;
 };
