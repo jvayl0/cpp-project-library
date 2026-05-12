@@ -75,3 +75,22 @@ Book::Book(unsigned id, const char* author, const char* title, const char* genre
            }
 }
 
+Book::Book(const Book& other){
+    id = other.id;
+    year = other.year;
+    rating = other.rating;
+    keywordsCount = other.keywordsCount;
+
+    author = copyString(other.author);
+    title = copyString(other.title);
+    description = copyString(other.description);
+
+    if(keywordsCount > 0){
+        keywords = new char*[keywordsCount];
+        for(size_t i = 0; i < keywordsCount; i++){
+            keywords[i] = copyString(other.keywords[i]);
+        }
+    } else {
+        keywords = nullptr;
+    }
+}
