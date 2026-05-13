@@ -1,7 +1,6 @@
 #include "Book.hpp"
 #include <cstring>
 
-// HELPERS
 namespace {
     char* copyString(const char* str) {
         if(!str) return nullptr;
@@ -13,7 +12,6 @@ namespace {
     }
 }
 
-// PRIVATE METHODS
 void Book::copyFrom(const Book& other) {
     id = other.id;
     year = other.year;
@@ -56,7 +54,6 @@ void Book::free(){
     keywordsCount = 0;
 }
 
-// CONSTRUCTORS AND DESTRUCTOR
 Book::Book() : id(0), author(nullptr), title(nullptr), genre(nullptr), description(nullptr),
                year(0), rating(0.0), keywords(nullptr), keywordsCount(0) {}
 
@@ -96,7 +93,6 @@ Book::~Book() {
     free();
 }
 
-// GETTERS
 unsigned Book::getId() const { return id; }
 const char* Book::getAuthor() const { return author ;}
 const char* Book::getTitle() const { return title; }
@@ -107,7 +103,7 @@ double Book::getRating() const { return rating; }
 const char* const* Book::getKeywords() const { return keywords; }
 int Book::getKeywordsCount() const {return keywordsCount; }
 
-// SETTERS
+
 void Book::setId(unsigned id) { this->id = id; }
 void Book::setAuthor(const char* author) {
     delete[] this->author;
