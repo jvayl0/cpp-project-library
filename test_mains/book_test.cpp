@@ -1,4 +1,4 @@
-#include "objects/Book.hpp"
+#include "Book.hpp"
 #include <iostream>
 
 int main() {
