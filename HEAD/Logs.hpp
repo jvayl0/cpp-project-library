@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Library.hpp"
+#include "User.hpp"
 
 class Logs {
 private:
     Library library;
+    User* currentUser;
 
     char* currentFilePath;
     bool isFileOpen;
 
-    void swap(Logs& other) noexcept;
-    void free();
+    void freeState();
 
 public:
     Logs();
