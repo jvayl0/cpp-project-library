@@ -21,7 +21,7 @@ public:
     void removeBook(unsigned id);
 
     Book* getBookById(unsigned id);
-    const Book* getBooks() const;
 
+    const Book* getBooks() const;
     unsigned getSize() const;
 };
