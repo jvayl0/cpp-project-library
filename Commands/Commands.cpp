@@ -2,32 +2,62 @@
 #include <cstring>
 #include <iostream>
 
-void Commands::clearComs() {
-    library = Library();
-    isFileOpen = false;
+
+void Commands::copyStringAt(char*& dest, const char* src) {
+    if(!src){
+        dest = nullptr;
+        return;
+    }
+
+    dest = new char[strlen(src) + 1];
+    strcpy(dest, src);
+}
+
+void Commands::free() {
+    for(size_t i = 0; i < usersCount; i++) {
+        delete[] users[i];
+    }
+    delete[] users;
+    users = nullptr;
 
     delete[] currentFilePath;
     currentFilePath = nullptr;
+
+    currentUser = nullptr;
+    usersCount = 0;
+    isFileOpen = false;
 }
 
 Commands::Commands() {
     currentUser = nullptr;
     currentFilePath = nullptr;
     isFileOpen = false;
+
+    usersCount = 1;
+    users = new User*[usersCount];
+
+    users[0] = new Admin("admin", "i<3c++");
 }
 
 Commands::~Commands() {
-    delete[] currentFilePath;
-    delete currentUser;
+    free();
+}
+
+bool Commands::isLoggedIn() const {
+    return currentUser != nullptr;
+}
+
+bool Commands::hasFileOpen() const {
+    return isFileOpen;
 }
 
 void Commands::run() {
     std::string command;
 
-    std::cout << "System started\n";
+    std::cout << "System started. Type (help) for commands\n";
 
     while(true) {
-        std::cout << "Command: ";
+        std::cout << "# ";
         std::cin >> command;
 
         if(command == "login") {
@@ -61,3 +91,63 @@ void Commands::run() {
         }
     }
 }
+
+void Commands::login() {
+
+    if(currentUser != nullptr) {
+        std::cout << "Already logged in\n";
+        return;
+    }
+
+    char username[50];
+    char password[50];
+
+    std::cout << "Username: ";
+    std::cin >> username;
+
+    std::cout << "Password: ";
+    std::cin >> password;
+
+    for(size_t i = 0; i < usersCount; i++) {
+        if(strcmp(users[i]->getUsername(), username) == 0 && users[i]->checkPassword(password)){
+
+            currentUser = users[i];
+
+            std::cout << "Welcome, " << currentUser->getUsername() << "!\n";
+
+            return;
+        }
+    }
+    
+    std::cout << "Wrong username or password!\n";
+}
+
+void Commands::open(const char* file) {
+    if(isFileOpen){
+        std::cout << "File already opened\n";
+        return;
+    }
+
+    delete[] currentFilePath;
+    currentFilePath = new char[strlen(file) + 1];
+    strcpy(currentFilePath, file);
+
+    isFileOpen = true;
+
+    std::cout << "Opened " << file << "\n";
+}
+
+void Commands::close(){
+    if(!isFileOpen){
+        std::cout << "No file opened\n";
+        return;
+    }
+
+    delete[] currentFilePath;
+    currentFilePath = nullptr;
+
+    isFileOpen = false;
+
+    std::cout << "Closed file\n";
+}
+

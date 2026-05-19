@@ -1,16 +1,21 @@
 #pragma once
 #include "Library.hpp"
-#include "User.hpp"
+#include "Admin.hpp"
+#include "Client.hpp"
 
 class Commands {
 private:
     Library library;
+    User** users;
+    unsigned usersCount;
+
     User* currentUser;
 
     char* currentFilePath;
     bool isFileOpen;
 
-    void clearComs();
+    void copyStringAt(char*& dest, const char* src);
+    void free();
 
 public:
     Commands();
@@ -26,4 +31,7 @@ public:
     void saveAs(const char* file);
     void help();
     void exit();
+
+    bool isLoggedIn() const;
+    bool hasFileOpen() const;
 };
