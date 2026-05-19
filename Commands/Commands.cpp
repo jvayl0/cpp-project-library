@@ -47,9 +47,6 @@ bool Commands::isLoggedIn() const {
     return currentUser != nullptr;
 }
 
-bool Commands::hasFileOpen() const {
-    return isFileOpen;
-}
 
 void Commands::run() {
     std::string command;
