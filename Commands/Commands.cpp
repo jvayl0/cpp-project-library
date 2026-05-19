@@ -151,3 +151,26 @@ void Commands::close(){
     std::cout << "Closed file\n";
 }
 
+void Commands::save() {
+    if(!isFileOpen){
+        std::cout << "No file opened\n";
+        return;
+    }
+
+    std::cout << "Saved " << currentFilePath << std::endl;
+}
+
+void Commands::saveAs(const char* file) {
+
+
+    std::cout << "Saved " << currentFilePath << std::endl;
+}
+
+void Commands::help() {
+    std::cout << "Commands: \n" << "login\n" << "open\n" << "close\n" << "save\n"
+              << "saveas\n" << "help\n" << "exit\n" ;
+}
+
+void Commands::exit(){
+    std::cout << "Exiting System\n";
+}
