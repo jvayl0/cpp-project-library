@@ -44,10 +44,20 @@ int main() {
     Book b3(3, "Frank Herbert", "Dune", "Sci-Fi",
             "Desert planet politics", 1965, 4.7,
             nullptr, 0);
+    Book b4(4, "Frank Herbert", "Dune", "Sci-Fi",
+            "Desert planet politics", 1965, 4.7,
+            nullptr, 0);
+
+    Book b5(5, "Frank Herbert", "Dune", "Sci-Fi",
+            "Desert planet politics", 1965, 4.7,
+            nullptr, 0);
 
     lib.addBook(b1);
     lib.addBook(b2);
     lib.addBook(b3);
+    lib.addBook(b4);
+    lib.addBook(b5);
+    
 
     std::cout << "\nAfter adding books:\n";
     printLibrary(lib);
