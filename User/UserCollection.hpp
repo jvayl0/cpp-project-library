@@ -23,6 +23,6 @@ public:
 
     User* login(const char* username, const char* password);
 
-    const User* getUsers() const;
+    const User* const* getUsers() const;
     unsigned getSize() const;
 };

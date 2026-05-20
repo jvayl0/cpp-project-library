@@ -30,7 +30,7 @@ void UserCollection::copyFrom(const UserCollection& other) {
 
 void UserCollection::free() {
     for(size_t i = 0; i < size; i++){
-        delete[] users[i];
+        delete users[i];
     }
     delete[] users;
 
@@ -49,6 +49,10 @@ UserCollection::UserCollection() {
 }
 
 UserCollection::UserCollection(const UserCollection& other) {
+    users = nullptr;
+    size = 0;
+    capacity = 0;
+
     copyFrom(other);
 }
 
@@ -106,8 +110,8 @@ User* UserCollection::login(const char* username, const char* password) {
     return nullptr;
 }
 
-const User* UserCollection::getUsers() const {
-    return users[0];
+const User* const* UserCollection::getUsers() const {
+    return users;
 }
 
 unsigned UserCollection::getSize() const {
