@@ -2,4 +2,10 @@
 
 Client::Client(const char* username, const char* password) : User(username, password) {}
 
-bool Client::isAdmin() const { return false; }
+bool Client::isAdmin() const {
+    return false;
+}
+
+User* Client::clone() const {
+    return new Client(*this);
+}
