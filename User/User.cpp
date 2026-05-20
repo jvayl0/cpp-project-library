@@ -11,12 +11,12 @@ namespace {
     }
 }
 
-User::User(const char* username, const char* password) {
-    this->username = copyString(username);
-    this->password = copyString(password);
+void User::copyFrom(const User& other) {
+    username = copyString(other.username);
+    password = copyString(other.password);
 }
 
-User::~User() {
+void User::free() {
     delete[] username;
     delete[] password;
 
@@ -24,8 +24,31 @@ User::~User() {
     password = nullptr;
 }
 
-const char* User::getUsername() const { return username; }
+User::User(const char* username, const char* password) {
+    this->username = copyString(username);
+    this->password = copyString(password);
+}
 
-bool User::checkPassword(const char* pass) const {
-    return strcmp(password, pass) == 0;
+User::User(const User& other) {
+    copyFrom(other);
+}
+
+User& User::operator=(const User& other) {
+    if(this != &other){
+        free();
+        copyFrom(other);
+    }
+    return *this;
+}
+
+User::~User() {
+    free();
+}
+
+const char* User::getUsername() const {
+    return username;
+}
+
+bool User::checkPassword(const char* password) const {
+    return strcmp(this->password, password) == 0;
 }
