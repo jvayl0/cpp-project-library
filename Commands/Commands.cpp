@@ -28,6 +28,14 @@ void Commands::free() {
     isFileOpen = false;
 }
 
+bool Commands::isLoggedIn() const {
+    return currentUser != nullptr;
+}
+
+bool Commands::isAdmin() const {
+    return currentUser && currentUser->isAdmin();
+}
+
 Commands::Commands() {
     currentUser = nullptr;
     currentFilePath = nullptr;
@@ -42,11 +50,6 @@ Commands::Commands() {
 Commands::~Commands() {
     free();
 }
-
-bool Commands::isLoggedIn() const {
-    return currentUser != nullptr;
-}
-
 
 void Commands::run() {
     std::string command;
