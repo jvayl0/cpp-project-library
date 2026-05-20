@@ -13,10 +13,10 @@ bool FileParser::loadFromFile(const char* fileP, Library& library) {
         return false;
     }
 
-    char buffer[1024];
+    char buffer[2048];
 
-    while(file.getline(buffer, 1024)) {
-        // ,,,,,
+    while(file.getline(buffer, 2048)) {
+        ///ssssss
     }
 
     file.close();
