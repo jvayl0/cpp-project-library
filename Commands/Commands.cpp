@@ -9,6 +9,10 @@
 #include <fstream>
 #include <cstring>
 
+//FOR PASSWORD READER
+#include <termios.h>
+#include <unistd.h>
+
 Commands::Commands() {
     currentUser = nullptr;
 
@@ -41,6 +45,47 @@ void Commands::run() {
         std::cin.getline(line, 1024);
         executeCommand(line);
     }
+}
+
+// PASSWORD READER ONLY WORKING ON MAC/LINUX
+
+void Commands::readPassword(char* password, int maxLen) {
+
+    termios oldt, newt;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    // disable canonical mode + echo
+    newt.c_lflag &= ~(ICANON | ECHO);
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    int i = 0;
+    while (true) {
+        char ch = getchar();
+        if (ch == '\n' || ch == '\r') {
+            break;
+        }
+        // backspace
+        if (ch == 127 || ch == 8) {
+            if (i > 0) {
+                i--;
+                std::cout << "\b \b";
+                std::cout.flush();
+            }
+        }
+        else if (i < maxLen - 1) {
+            password[i++] = ch;
+            std::cout << '*';
+            std::cout.flush();
+        }
+    }
+    password[i] = '\0';
+
+    // restore terminal 
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    std::cout << "\n";
 }
 
 // FILE COMMANDS
@@ -197,7 +242,7 @@ void Commands::login() {
     std::cin.getline(username, 50);
 
     std::cout << "Password: ";
-    std::cin.getline(password, 50);
+    readPassword(password, 50);
 
     currentUser = users.login(username, password);
 

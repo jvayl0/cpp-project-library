@@ -46,6 +46,9 @@ private:
 
     // RUN HELPER
     void executeCommand(char* line);
+    
+    // PASSWORD BONUS
+    void readPassword(char* password, int maxLen);
 
 public:
     Commands();
