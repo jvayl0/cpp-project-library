@@ -32,7 +32,7 @@ private:
         // BOOOK COMMANDS
     void booksAll() const;
     void booksInfo(unsigned id);
-    void booksFind(const char* option, const char* str)
+    void booksFind(const char* option, const char* str);
     void booksSort(const char* option, const char* order);
 
     void booksAdd();
