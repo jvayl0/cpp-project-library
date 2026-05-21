@@ -24,11 +24,6 @@ Commands::Commands() {
 }
 
 // HELPERS
-
-bool Commands::hasUserAcces() const {
-    return currentUser != nullptr;
-}
-
 bool Commands::isAdmin() const {
     return currentUser && currentUser->isAdmin();
 }
