@@ -1,56 +1,49 @@
 #pragma once
-#include "Library.hpp"
-#include "User.hpp"
-#include "Admin.hpp"
-#include "Client.hpp"
 
-class Commands {
+#include "Library.hpp"
+#include "UserCollection.hpp"
+#include "User.hpp"
+
+class Comamands {
 private:
     Library library;
-
-    User** users;
-    unsigned usersCount;
+    UserCollection users;
 
     User* currentUser;
 
-    char* currentFilePath;
+    bool isRunning;
     bool isFileOpen;
 
-    void copyStringAt(char*& dest, const char* src);
-    void free();
+    char currentFile[1024];
 
-    bool isLoggedIn() const;
+    bool hasUserAcces() const;
     bool isAdmin() const;
 
-    void handleBooks();
-    void handleUsers();
+        // GENERAL FILE COMMANDS
+    void open(const char* file);
+    void close();
+    void save();
+    void saveAs(const char* file);
+    void help();
 
-    void booksAll();
-    void booksInfo();
-    void booksFind();
-    void booksSort();
-    void booksView();
+    void loing();
+    void logout();
+
+        // BOOOK COMMANDS
+    void booksAll() const;
+    void booksInfo(unsigned id);
+    void booksFind(const char* option, const char* str)
+    void booksSort(const char* option, const char* order);
+
     void booksAdd();
     void booksRemove();
 
-    void usersAdd();
-    void usersRemove();
+    // USER COOMANDS
+    void userAdd();
+    void userRemove();
 
 public:
-    Commands();
-    ~Commands();
+    Comamands();
 
     void run();
-
-    void login();
-    void logout();
-
-    void open(const char* file);
-    void close();
-
-    void save();
-    void saveAs(const char* file);
-    
-    void help();
-    void exit();
 };
