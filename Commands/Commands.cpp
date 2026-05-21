@@ -264,6 +264,119 @@ void Commands::logout() {
     currentUser = nullptr;
 }
 
+//                      BOOKS
+
+void Commands::booksAll() const {
+    const Book* books = library.getBooks();
+    unsigned size = library.getSize();
+
+    if(size == 0){
+        std::cout << "No books available\n";
+        return;
+    }
+
+    for(size_t i = 0; i < size; i++){
+        std::cout 
+        << "Title: " << books[i].getTitle() << " | "
+        << "Author: " << books[i].getAuthor() << " | "
+        << "Genre: " << books[i].getGenre() << " | "
+        << "ID: " << books[i].getId() << std::endl;
+    }
+}
+
+void Commands::booksAdd() {
+    if(!isAdmin()) {
+        std::cout << "Admin only!\n";
+        return;
+    }
+
+    unsigned id, year;
+    double rating;
+
+    char author[128];
+    char title[128];
+    char genre[128];
+    char description[128];
+
+    int keywordsCount;
+
+    std::cout << "ID: ";
+    std::cin >> id;
+    std::cin.ignore();
+
+    std::cout << "Author: ";
+    std::cin.getline(author, 128);
+
+    std::cout << "Title: ";
+    std::cin.getline(title, 128);
+
+    std::cout << "Genre: ";
+    std::cin.getline(genre, 128);
+
+    std::cout << "Description: ";
+    std::cin.getline(description, 256);
+
+    std::cout << "Year: ";
+    std::cin >> year;
+
+    std::cout << "Rating: ";
+    std::cin >> rating;
+
+    std::cout << "Keywords count: ";
+    std::cin >> keywordsCount;
+    std::cin.ignore();
+
+    char** keywords = nullptr;
+
+    if(keywordsCount > 0) {
+        keywords = new char*[keywordsCount];
+
+        for(size_t i = 0; i < keywordsCount; i++){
+            char buffer[128];
+
+            std::cout << "Keyword " << i + 1  << ": ";
+            std::cin.getline(buffer, 128);
+
+            keywords[i] = new char[strlen(buffer) + 1];
+            strcpy(keywords[i], buffer);
+        }
+    }
+
+    Book book (id, author, title, genre, description, year, rating, keywords, keywordsCount);
+
+    library.addBook(book);
+
+    for(size_t i = 0; i < keywordsCount; i++){
+        delete[] keywords[i];
+    }
+    delete[] keywords;
+
+    std::cout << "Book added!\n";
+}
+
+void Commands::booksRemove() {
+    if(!isAdmin()){
+        std::cout << "Admin only!\n";
+        return;
+    }
+
+    unsigned id;
+
+    std::cout << "Enter book ID: ";
+    std::cin >> id;
+    std::cin.ignore();
+
+    Book* book = library.getBookById(id);
+
+    if(!book){
+        std::cout << "Book not found!\n";
+        return;
+    }
+
+    library.removeBook(id);
+
+    std::cout << "Book removed!\n";
+}
 
 // EXECUTE COMMAND
 
@@ -359,14 +472,6 @@ void Commands::executeCommand(char* line) {
     }
 }
 
-void Commands::booksAdd() {
-    std::cout << "booksAdd not implemented yet\n";
-}
-
-void Commands::booksRemove() {
-    std::cout << "booksRemove not implemented yet\n";
-}
-
 void Commands::userAdd() {
     std::cout << "userAdd not implemented yet\n";
 }
@@ -385,8 +490,4 @@ void Commands::booksInfo(unsigned) {
 
 void Commands::booksSort(const char*, const char*) {
     std::cout << "booksSort not implemented yet\n";
-}
-
-void Commands::booksAll() const {
-    std::cout << "booksAll not implemented yet\n";
 }
