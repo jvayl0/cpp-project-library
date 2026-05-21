@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Library.hpp"
-#include "UserCollection.hpp"
-#include "User.hpp"
+#include "../Library/Library.hpp"
+#include "../User/UserCollection.hpp"
+#include "../FileParsers/FileParser.hpp"
 
 class Commands {
 private:

@@ -1,10 +1,9 @@
 #include "Commands.hpp"
 
-#include "FileParser.hpp"
-#include "UserFileParser.hpp"
-
-#include "Admin.hpp"
-#include "Client.hpp"
+#include "../FileParsers/FileParser.hpp"
+#include "../FileParsers/UserFileParser.hpp"
+#include "../Library/Library.hpp"
+#include "../User/UserCollection.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -306,4 +305,36 @@ void Commands::executeCommand(char* line) {
     else {
         std::cout << "Unknown command!\n";
     }
+}
+
+void Commands::booksAdd() {
+    std::cout << "booksAdd not implemented yet\n";
+}
+
+void Commands::booksRemove() {
+    std::cout << "booksRemove not implemented yet\n";
+}
+
+void Commands::userAdd() {
+    std::cout << "userAdd not implemented yet\n";
+}
+
+void Commands::userRemove() {
+    std::cout << "userRemove not implemented yet\n";
+}
+
+void Commands::booksFind(const char*, const char*) {
+    std::cout << "booksFind not implemented yet\n";
+}
+
+void Commands::booksInfo(unsigned) {
+    std::cout << "booksInfo not implemented yet\n";
+}
+
+void Commands::booksSort(const char*, const char*) {
+    std::cout << "booksSort not implemented yet\n";
+}
+
+void Commands::booksAll() const {
+    std::cout << "booksAll not implemented yet\n";
 }
