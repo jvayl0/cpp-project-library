@@ -7,6 +7,7 @@
 #include "Client.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
 
 Commands::Commands() {
@@ -14,6 +15,7 @@ Commands::Commands() {
 
     isRunning = true;
     isFileOpen = false;
+    isClosed = false;
 
     currentFile[0] = '\0';
 }
@@ -42,9 +44,159 @@ void Commands::run() {
     }
 }
 
+// FILE COMMANDS
+
+void Commands::open(const char* file) {
+    if(isFileOpen){
+        std::cout << "File already opened\n";
+        return;
+    }
+
+    std::ifstream test(file);
+
+    if(!test.is_open()) {
+        library = Library();
+        users = UserCollection();
+
+        strcpy(currentFile, file);
+        isFileOpen = true;
+
+        std::cout << "File not found. Creating new empty file: " << file << std::endl;
+        return;
+    }
+    test.close();
+
+    bool ok = FileParser::loadFromFile(file, library);
+
+    if(!ok) {
+        std::cout << "Error loading file\n";
+        exit();
+    }
+
+    UserFileParser::loadFromFile("users.txt", users);
+
+    strcpy(currentFile, file);
+    isFileOpen = true;
+
+    std::cout << "Successfully opened " << file << std::endl;
+}
+
+void Commands::close() {
+    if(!isFileOpen) {
+        std::cout << "No file opened!\n";
+        return;
+    }
+
+    library = Library();
+    users = UserCollection();
+
+    currentUser = nullptr;
+    currentFile[0] = '\0';
+
+    isFileOpen = false;
+    isClosed = true;
+
+    std::cout << "Successfully closed!\n";
+}
+
+void Commands::save() {
+    if(!isFileOpen) {
+        std::cout << "No file opened\n";
+        return;
+    }
+
+    if(currentFile[0] == '\0') {
+        std::cout << "No file selected!\n";
+        return;
+    }
+
+    bool ok = FileParser::saveToFile(currentFile, library);
+
+    if(!ok) {
+        std::cout << "Error saving data\n";
+        return;
+    }
+
+    UserFileParser::saveToFile("users.txt", users);
+
+    std::cout << "Saved" << currentFile << std::endl;
+}
+
+void Commands::saveAs(const char* file) {
+    if(!isFileOpen) {
+        std::cout << "No file opened!\n";
+        return;
+    }
+
+    if(!file || file[0] == '\0') {
+        std::cout << "Invalid file name\n";
+        return;
+    }
+
+    bool ok = FileParser::saveToFile(file, library);
+
+    if(!ok) {
+        std::cout << "Error saving file\n";
+        return;
+    }
+
+    UserFileParser::saveToFile("users.txt", users);
+
+    std::cout << "Saved as " << file << std::endl;
+}
+
+void Commands::help() {
+    std::cout << "The following commands are supported:\n\n"
+
+        << "FILE OPERATIONS:\n"
+        << "open <file>     - opens a file\n"
+        << "close           - closes current file\n"
+        << "save            - saves current file\n"
+        << "saveas <file>   - saves as new file\n\n"
+
+        << "AUTH:\n"
+        << "login           - logs into system\n"
+        << "logout          - logs out user\n\n"
+
+        << "BOOKS (CLIENT):\n"
+        << "books all       - lists all books\n"
+        << "books info <id> - shows book details\n"
+        << "books find ...  - searches books\n"
+        << "books sort ...  - sorts books\n\n"
+
+        << "BOOKS (ADMIN ONLY):\n"
+        << "books add       - adds new book\n"
+        << "books remove    - removes book\n\n"
+
+        << "USERS (ADMIN ONLY):\n"
+        << "users add       - adds new user\n"
+        << "users remove    - removes user\n\n"
+
+        << "SYSTEM:\n"
+        << "help            - shows this help\n"
+        << "exit            - exits program\n";
+}
+
+void Commands::exit() {
+    isRunning = false;
+
+    std::cout << "Exiting the program\n";
+}
+
+
 // EXECUTE COMMAND
 
 void Commands::executeCommand(char* line) {
+
+    if (isClosed) {
+        if (strncmp(line, "open ", 5) == 0) {
+            open(line + 5);
+            return;
+        }
+        std::cout
+            << "File is closed. Only 'open' is allowed.\n";
+        return;
+    }
 
     if(strncmp(line, "open ", 5) == 0) {
         open(line + 5);
@@ -112,8 +264,7 @@ void Commands::executeCommand(char* line) {
         help();
     }
     else if(strcmp(line, "exit") == 0){
-        isRunning = false;
-        std::cout << "Exiting System!\n";
+        exit();
     }
     else {
         std::cout << "Unknown command!\n";

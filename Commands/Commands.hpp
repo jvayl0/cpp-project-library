@@ -18,6 +18,7 @@ private:
 
     bool hasUserAcces() const;
     bool isAdmin() const;
+    bool isClosed;
 
         // GENERAL FILE COMMANDS
     void open(const char* file);
@@ -25,6 +26,7 @@ private:
     void save();
     void saveAs(const char* file);
     void help();
+    void exit();
 
     void login();
     void logout();
