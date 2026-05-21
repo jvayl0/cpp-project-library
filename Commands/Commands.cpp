@@ -183,6 +183,43 @@ void Commands::exit() {
     std::cout << "Exiting the program\n";
 }
 
+// LOGIN AND LOGOUT - AUTH
+
+void Commands::login() {
+    if(currentUser) {
+        std::cout << "Already logged in\n";
+        return;
+    }
+
+    char username[50];
+    char password[50];
+
+    std::cout << "Username: ";
+    std::cin.getline(username, 50);
+
+    std::cout << "Password: ";
+    std::cin.getline(password, 50);
+
+    currentUser = users.login(username, password);
+
+    if(currentUser){
+        std::cout << "Welcome, " << currentUser->getUsername() << std::endl;
+    }else {
+        std::cout << "Wrong username or password!\n";
+    }
+}
+
+void Commands::logout() {
+    if(!currentUser){
+        std::cout << "No user is logged in\n";
+        return;
+    }
+
+    std::cout << "Goodbye, " << currentUser->getUsername() << std::endl;
+
+    currentUser = nullptr;
+}
+
 
 // EXECUTE COMMAND
 
