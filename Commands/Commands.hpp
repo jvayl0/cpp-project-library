@@ -4,7 +4,7 @@
 #include "UserCollection.hpp"
 #include "User.hpp"
 
-class Comamands {
+class Commands {
 private:
     Library library;
     UserCollection users;
@@ -26,7 +26,7 @@ private:
     void saveAs(const char* file);
     void help();
 
-    void loing();
+    void login();
     void logout();
 
         // BOOOK COMMANDS
@@ -42,8 +42,11 @@ private:
     void userAdd();
     void userRemove();
 
+    // RUN HELPER
+    void executeCommand(char* line);
+
 public:
-    Comamands();
+    Commands();
 
     void run();
 };

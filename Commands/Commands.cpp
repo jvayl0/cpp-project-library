@@ -1,34 +1,26 @@
 #include "Commands.hpp"
-#include <cstring>
+
+#include "FileParser.hpp"
+#include "UserFileParser.hpp"
+
+#include "Admin.hpp"
+#include "Client.hpp"
+
 #include <iostream>
+#include <cstring>
 
-
-void Commands::copyStringAt(char*& dest, const char* src) {
-    if(!src){
-        dest = nullptr;
-        return;
-    }
-
-    dest = new char[strlen(src) + 1];
-    strcpy(dest, src);
-}
-
-void Commands::free() {
-    for(size_t i = 0; i < usersCount; i++) {
-        delete[] users[i];
-    }
-    delete[] users;
-    users = nullptr;
-
-    delete[] currentFilePath;
-    currentFilePath = nullptr;
-
+Commands::Commands() {
     currentUser = nullptr;
-    usersCount = 0;
+
+    isRunning = true;
     isFileOpen = false;
+
+    currentFile[0] = '\0';
 }
 
-bool Commands::isLoggedIn() const {
+// HELPERS
+
+bool Commands::hasUserAcces() const {
     return currentUser != nullptr;
 }
 
@@ -36,141 +28,94 @@ bool Commands::isAdmin() const {
     return currentUser && currentUser->isAdmin();
 }
 
-Commands::Commands() {
-    currentUser = nullptr;
-    currentFilePath = nullptr;
-    isFileOpen = false;
-
-    usersCount = 1;
-    users = new User*[usersCount];
-
-    users[0] = new Admin("admin", "i<3c++");
-}
-
-Commands::~Commands() {
-    free();
-}
+// RUN
 
 void Commands::run() {
-    std::string command;
+    char line[1024];
+    std::cout << "System started!\n";
 
-    std::cout << "System started. Type (help) for commands\n";
+    while(isRunning) {
+        std::cout << "> ";
 
-    while(true) {
-        std::cout << "# ";
-        std::cin >> command;
-
-        if(command == "login") {
-            login();
-
-        } 
-        else if (command == "open") {
-            char file[1024];
-            std::cin >> file;
-            open(file);
-
-        }
-        else if (command == "save") {
-            save();
-        }
-        else if (command == "saveas") {
-            char file[1024];
-            std::cin >> file;
-            saveAs(file);
-
-        }
-        else if (command == "help") {
-            help();
-        }
-        else if (command == "exit") {
-            exit();
-            break;
-        }
-        else {
-            std::cout << "Unknown command!\n";
-        }
+        std::cin.getline(line, 1024);
+        executeCommand(line);
     }
 }
 
-void Commands::login() {
+// EXECUTE COMMAND
 
-    if(currentUser != nullptr) {
-        std::cout << "Already logged in\n";
-        return;
+void Commands::executeCommand(char* line) {
+
+    if(strncmp(line, "open ", 5) == 0) {
+        open(line + 5);
     }
+    else if(strcmp(line, "close") == 0) {
+        close();
+    }
+    else if(strcmp(line, "save") == 0) {
+        save();
+    }
+    else if(strncmp(line, "saveas ", 7) == 0) {
+        saveAs(line + 7);
+    }
+    else if(strcmp(line, "login") == 0) {
+        login();
+    }
+    else if(strcmp(line, "logout") == 0) {
+        logout();
+    }
+    else if(strcmp(line, "books all") == 0) {
+        booksAll();
+    }
+    else if(strncmp(line, "books info ", 11) == 0) {
+        unsigned id = atoi(line + 11);
+        booksInfo(id);
+    }
+    else if(strncmp(line, "books find ", 11) == 0) {
+        char* ptr = line + 11;
+        char* option = strtok(ptr, " ");
+        char* str = strtok(nullptr, "");
 
-    char username[50];
-    char password[50];
-
-    std::cout << "Username: ";
-    std::cin >> username;
-
-    std::cout << "Password: ";
-    std::cin >> password;
-
-    for(size_t i = 0; i < usersCount; i++) {
-        if(strcmp(users[i]->getUsername(), username) == 0 && users[i]->checkPassword(password)){
-
-            currentUser = users[i];
-
-            std::cout << "Welcome, " << currentUser->getUsername() << "!\n";
-
-            return;
+        if(option && str) {
+            while(*str == ' '){
+                str++;
+            }
+            booksFind(option, str);
         }
     }
-    
-    std::cout << "Wrong username or password!\n";
-}
+    else if(strncmp(line, "books sort ", 11) == 0) {
+        char* ptr = line + 11;
+        char* option = strtok(ptr, " ");
+        char* order = strtok(nullptr, " ");
+        
+        if(!order){
+            order = (char*)"asc";
+        }
 
-void Commands::open(const char* file) {
-    if(isFileOpen){
-        std::cout << "File already opened\n";
-        return;
+        if(option){
+            booksSort(option, order);
+        }
     }
-
-    delete[] currentFilePath;
-    currentFilePath = new char[strlen(file) + 1];
-    strcpy(currentFilePath, file);
-
-    isFileOpen = true;
-
-    std::cout << "Opened " << file << "\n";
-}
-
-void Commands::close(){
-    if(!isFileOpen){
-        std::cout << "No file opened\n";
-        return;
+    else if(strcmp(line, "books add") == 0) {
+        booksAdd();
     }
-
-    delete[] currentFilePath;
-    currentFilePath = nullptr;
-
-    isFileOpen = false;
-
-    std::cout << "Closed file\n";
-}
-
-void Commands::save() {
-    if(!isFileOpen){
-        std::cout << "No file opened\n";
-        return;
+    else if(strcmp(line, "books remove") == 0) {
+        booksRemove();
     }
-
-    std::cout << "Saved " << currentFilePath << std::endl;
-}
-
-void Commands::saveAs(const char* file) {
-
-
-    std::cout << "Saved " << currentFilePath << std::endl;
-}
-
-void Commands::help() {
-    std::cout << "Commands: \n" << "login\n" << "open\n" << "close\n" << "save\n"
-              << "saveas\n" << "help\n" << "exit\n" ;
-}
-
-void Commands::exit(){
-    std::cout << "Exiting System\n";
+    else if(strcmp(line, "user add") == 0) {
+        userAdd();
+    }
+    else if(strcmp(line, "user remove") == 0) {
+        userRemove();
+    }
+    else if(strcmp(line, "help") == 0) {
+        help();
+    }
+    else if(strcmp(line, "exit") == 0){
+        isRunning = false;
+        std::cout << "Exiting System!\n";
+    }
+    else {
+        std::cout << "Unknown command!\n";
+    }
 }
