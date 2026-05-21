@@ -49,6 +49,10 @@ const char* User::getUsername() const {
     return username;
 }
 
+const char* User::getPassword() const {
+    return password;
+}
+
 bool User::checkPassword(const char* password) const {
     return strcmp(this->password, password) == 0;
 }
