@@ -224,21 +224,27 @@ void Commands::logout() {
 
 void Commands::executeCommand(char* line) {
 
-    if (isClosed) {
-        if (strncmp(line, "open ", 5) == 0) {
-            open(line + 5);
-            return;
-        }
-        std::cout
-            << "File is closed. Only 'open' is allowed.\n";
+    bool isSystemCommand =
+        strncmp(line, "open ", 5) == 0 ||
+        strcmp(line, "exit") == 0 ||
+        strcmp(line, "help") == 0 ||
+        strcmp(line, "login") == 0 ||
+        strcmp(line, "logout") == 0;
+
+    if (isClosed && !isSystemCommand) {
+        std::cout << "File is closed. Only open/login/logout/help/exit are allowed.\n";
         return;
     }
 
     if(strncmp(line, "open ", 5) == 0) {
         open(line + 5);
+        isClosed = false;
+        return;
     }
     else if(strcmp(line, "close") == 0) {
         close();
+        isClosed = true;
+        return;
     }
     else if(strcmp(line, "save") == 0) {
         save();
@@ -301,6 +307,7 @@ void Commands::executeCommand(char* line) {
     }
     else if(strcmp(line, "exit") == 0){
         exit();
+        return;
     }
     else {
         std::cout << "Unknown command!\n";
