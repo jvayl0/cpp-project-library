@@ -13,6 +13,62 @@
 #include <termios.h>
 #include <unistd.h>
 
+
+// CASE IGNORE HELPERS
+namespace {
+    char toLowerChar(char c) {
+        if(c >= 'A' && c <= 'Z'){
+            return c + ('a' - 'A');
+        }
+        return c;
+    }
+
+    bool contains(const char* text, const char* search) {
+        if(!search){
+            return true;
+        }
+
+        for(size_t i = 0; text[i] != '\0'; i++){
+            size_t j = 0;
+
+            while(search[j] && text[i + j] == search[j]){
+                j++;
+            }
+
+            if(!search[j]){
+                return true;
+            }
+        }
+        return true;
+    }
+
+    bool ignoreCase(const char* text, const char* search) {
+        char lowerText[1024];
+        char lowerSearch[1024];
+
+        size_t i = 0;
+
+        while(text[i]){
+            lowerText[i] = toLowerChar(text[i]);
+            i++;
+        }
+
+        lowerText[i] = '\0';
+
+        i = 0;
+
+        while(search[i]){
+            lowerSearch[i] = toLowerChar(search[i]);
+            i++;
+        }
+
+        lowerSearch[i] = '\0';
+
+        return contains(lowerText, lowerSearch);
+    }
+}
+
+
 Commands::Commands() {
     currentUser = nullptr;
 
@@ -373,6 +429,31 @@ void Commands::booksRemove() {
     std::cout << "Book removed!\n";
 }
 
+void Commands::booksInfo(unsigned id) {
+    Book* book = library.getBookById(id);
+
+    if(!book){
+        std::cout << "Book not found!\n";
+        return;
+    }
+
+    std::cout << "ID: " << book->getId() << std::endl;
+    std::cout << "Title: " << book->getTitle() << std::endl;
+    std::cout << "Author: " << book->getAuthor() << std::endl;
+    std::cout << "Genre: " << book->getGenre() << std::endl;
+    std::cout << "Description: " << book->getDescription() << std::endl;
+    std::cout << "Year: " << book->getYear() << std::endl;
+    std::cout << "Rating: " << book->getRating() << std::endl;
+    std::cout << "Keywords: ";
+
+    const char* const* keywords = book->getKeywords();
+
+    for(size_t i = 0; i < book->getKeywordsCount(); i++){
+        std::cout << keywords[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
 // EXECUTE COMMAND
 
 void Commands::executeCommand(char* line) {
@@ -465,24 +546,4 @@ void Commands::executeCommand(char* line) {
     else {
         std::cout << "Unknown command!\n";
     }
-}
-
-void Commands::userAdd() {
-    std::cout << "userAdd not implemented yet\n";
-}
-
-void Commands::userRemove() {
-    std::cout << "userRemove not implemented yet\n";
-}
-
-void Commands::booksFind(const char*, const char*) {
-    std::cout << "booksFind not implemented yet\n";
-}
-
-void Commands::booksInfo(unsigned) {
-    std::cout << "booksInfo not implemented yet\n";
-}
-
-void Commands::booksSort(const char*, const char*) {
-    std::cout << "booksSort not implemented yet\n";
 }
