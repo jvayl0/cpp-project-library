@@ -491,6 +491,60 @@ void Commands::booksFind(const char* option, const char* str) {
     }
 }
 
+// INSERTION SORT
+void Commands::booksSort(const char* option, const char* order) {
+    unsigned size = library.getSize();
+
+    Book* sorted = new Book[size];
+
+    const Book* books = library.getBooks();
+
+    for(size_t i = 0; i < size; i++){
+        sorted[i] = books[i];
+    }
+
+    for(size_t i = 1; i < size; i++) {
+        Book key = sorted[i];
+        size_t j = i - 1;
+
+        while(j >= 0) {
+            bool condition = false;
+
+            if(strcmp(option, "title") == 0) {
+                condition = strcmp(sorted[j].getTitle(), key.getTitle()) > 0;
+            }
+            else if(strcmp(option, "author") == 0) {
+                condition = strcmp(sorted[j].getAuthor(), key.getAuthor()) > 0;
+            }
+            else if(strcmp(option, "year") == 0) {
+                condition = sorted[j].getYear() > key.getYear();
+            }
+            else if(strcmp(option, "rating") == 0){
+                condition = sorted[j].getRating() > key.getRating();
+            }
+
+            if(strcmp(order, "desc") == 0) {
+                condition = !condition;
+            }
+
+            if(!condition) break;
+
+            sorted[j + 1] = sorted[j];
+            j--;
+        }
+        sorted[j + 1] = key;
+    }
+
+    for(size_t i = 0; i < size; i++){
+        std::cout << sorted[i].getTitle() << "|"
+                  << sorted[i].getAuthor() << "|"
+                  << sorted[i].getYear() << "|"
+                  << sorted[i].getRating() << std::endl;
+    }
+
+    delete[] sorted;
+}
+
 // EXECUTE COMMAND
 
 void Commands::executeCommand(char* line) {
