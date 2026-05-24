@@ -167,7 +167,12 @@ void Commands::open(const char* file) {
 
     if(!ok) {
         std::cout << "Error loading file\n";
-        exit();
+        
+        library = Library();
+        users = UserCollection();
+
+        isFileOpen = false;
+        return;
     }
 
     UserFileParser::loadFromFile("users.txt", users);
