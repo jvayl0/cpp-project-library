@@ -16,7 +16,6 @@ private:
 
     char currentFile[1024];
 
-    bool hasUserAcces() const;
     bool isAdmin() const;
     bool isClosed;
 
