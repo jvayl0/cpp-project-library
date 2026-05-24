@@ -4,6 +4,8 @@
 #include "../FileParsers/UserFileParser.hpp"
 #include "../Library/Library.hpp"
 #include "../User/UserCollection.hpp"
+#include "../User/Admin.hpp"
+#include "../User/Client.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -543,6 +545,62 @@ void Commands::booksSort(const char* option, const char* order) {
     }
 
     delete[] sorted;
+}
+
+//                  USER
+
+void Commands::userAdd() {
+    if(!currentUser || !currentUser->isAdmin()){
+        std::cout << "Admin only\n";
+        return;
+    }
+
+    char username[50];
+    char password[50];
+    char type[10];
+
+    std::cout << "Username: ";
+    std::cin.getline(username, 50);
+
+    std::cout << "Password: ";
+    std::cin.getline(password, 50);
+
+    std::cout << "Type (admin/client): ";
+    std::cin.getline(type, 10);
+
+    if(strcmp(type, "admin") == 0){
+        users.addUser(new Admin(username, password));
+
+    } else if(strcmp(type, "client") == 0){
+        users.addUser(new Client(username, password));
+    }
+    else {
+        std::cout << "Invalid type!\n";
+        return;
+    }
+
+    std::cout << "User added!\n";
+}
+
+void Commands::userRemove() {
+    if(!currentUser || !currentUser->isAdmin()){
+        std::cout << "Admin only!\n";
+        return;
+    }
+
+    char username[50];
+
+    std::cout << "Username to remove: ";
+    std::cin.getline(username, 50);
+
+    if(strcmp(username, "admin") == 0){
+        std::cout << "CREATOR!";
+        return;
+    }
+
+    users.removeUser(username);
+
+    std::cout << "User removed\n";
 }
 
 // EXECUTE COMMAND
