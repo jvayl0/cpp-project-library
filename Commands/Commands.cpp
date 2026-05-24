@@ -454,6 +454,43 @@ void Commands::booksInfo(unsigned id) {
     std::cout << std::endl;
 }
 
+void Commands::booksFind(const char* option, const char* str) {
+    const Book* books = library.getBooks();
+    size_t size = library.getSize();
+
+    bool found = false;
+
+    for(size_t i = 0; i < size; i++){
+        bool match = false;
+        if(strcmp(option, "title") == 0){
+            match = ignoreCase(books[i].getTitle(), str);
+        }
+        else if(strcmp(option, "author") == 0){
+            match = ignoreCase(books[i].getAuthor(), str);
+        }
+        else if(strcmp(option, "tag") == 0){
+            const char* const* keywords = books[i].getKeywords();
+
+            for(size_t j = 0; j < books[i].getKeywordsCount(); j++){
+                if(ignoreCase(keywords[j], str)){
+                    match = true;
+                    break;
+                }
+            }
+        }
+
+        if(match){
+            found = true;
+            std::cout << books[i].getId() << "|" << books[i].getTitle() << "|"
+                      << books[i].getAuthor() << "|" << books[i].getGenre() << std::endl;
+        }
+    }
+
+    if(!found){
+        std::cout << "No matching books!\n";
+    }
+}
+
 // EXECUTE COMMAND
 
 void Commands::executeCommand(char* line) {
