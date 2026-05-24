@@ -1,0 +1,6 @@
+admin|admin|i<3c++
+admin|i<3c++|admin
+client|1234|client
+client|abcd|client
+client|pass123|client
+client|rootpass|admin

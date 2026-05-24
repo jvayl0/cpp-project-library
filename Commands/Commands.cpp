@@ -25,51 +25,30 @@ namespace {
         return c;
     }
 
-    bool contains(const char* text, const char* search) {
-        if(!search){
+    bool ignoreCase(const char* text, const char* pattern) {
+
+    if (!text || !pattern) return false;
+
+    if (*pattern == '\0') return false; // ❗ важно
+
+    for (size_t i = 0; text[i]; i++) {
+
+        size_t j = 0;
+
+        while (pattern[j] &&
+               toLowerChar(text[i + j]) ==
+               toLowerChar(pattern[j])) {
+            j++;
+        }
+
+        if (pattern[j] == '\0') {
             return true;
         }
-
-        for(size_t i = 0; text[i] != '\0'; i++){
-            size_t j = 0;
-
-            while(search[j] && text[i + j] == search[j]){
-                j++;
-            }
-
-            if(!search[j]){
-                return true;
-            }
-        }
-        return true;
     }
 
-    bool ignoreCase(const char* text, const char* search) {
-        char lowerText[1024];
-        char lowerSearch[1024];
-
-        size_t i = 0;
-
-        while(text[i]){
-            lowerText[i] = toLowerChar(text[i]);
-            i++;
-        }
-
-        lowerText[i] = '\0';
-
-        i = 0;
-
-        while(search[i]){
-            lowerSearch[i] = toLowerChar(search[i]);
-            i++;
-        }
-
-        lowerSearch[i] = '\0';
-
-        return contains(lowerText, lowerSearch);
+        return false;
     }
 }
-
 
 Commands::Commands() {
     currentUser = nullptr;
@@ -512,7 +491,7 @@ void Commands::booksSort(const char* option, const char* order) {
 
     for(size_t i = 1; i < size; i++) {
         Book key = sorted[i];
-        size_t j = i - 1;
+        int j = i - 1;
 
         while(j >= 0) {
             bool condition = false;
