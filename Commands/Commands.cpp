@@ -29,7 +29,7 @@ namespace {
 
     if (!text || !pattern) return false;
 
-    if (*pattern == '\0') return false; // ❗ важно
+    if (*pattern == '\0') return false;
 
     for (size_t i = 0; text[i]; i++) {
 
