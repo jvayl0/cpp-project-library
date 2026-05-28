@@ -17,6 +17,8 @@ private:
     char currentFile[1024];
 
     bool isAdmin() const;
+    bool isClient() const;
+    bool isLogged() const;
     bool isClosed;
 
         // GENERAL FILE COMMANDS

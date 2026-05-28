@@ -23,5 +23,6 @@ public:
     Book* getBookById(unsigned id);
 
     const Book* getBooks() const;
+    Book* getBook();
     unsigned getSize() const;
 };

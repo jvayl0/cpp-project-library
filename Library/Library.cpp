@@ -86,6 +86,9 @@ Book* Library::getBookById(unsigned id) {
 const Book* Library::getBooks() const {
     return books;
 }
+Book* Library::getBook(){
+    return books;
+}
 
 unsigned Library::getSize() const {
     return size;

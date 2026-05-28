@@ -65,6 +65,14 @@ bool Commands::isAdmin() const {
     return currentUser && currentUser->isAdmin();
 }
 
+bool Commands::isClient() const {
+    return currentUser && !currentUser->isAdmin();
+}
+
+bool Commands::isLogged() const {
+    return currentUser != nullptr;
+}
+
 // RUN
 
 void Commands::run() {
@@ -291,8 +299,8 @@ void Commands::login() {
 }
 
 void Commands::logout() {
-    if(!currentUser){
-        std::cout << "No user is logged in\n";
+    if(!isLogged()){
+        std::cout << "Please login to use this command!\n";
         return;
     }
 
@@ -304,6 +312,12 @@ void Commands::logout() {
 //                      BOOKS
 
 void Commands::booksAll() const {
+
+    if(!isLogged()){
+        std::cout << "Please login to use this command!\n";
+        return;
+    }
+
     const Book* books = library.getBooks();
     unsigned size = library.getSize();
 
@@ -441,6 +455,12 @@ void Commands::booksInfo(unsigned id) {
 }
 
 void Commands::booksFind(const char* option, const char* str) {
+
+    if(!isLogged()){
+        std::cout << "Please login to use this command!\n";
+        return;
+    }
+
     const Book* books = library.getBooks();
     size_t size = library.getSize();
 
@@ -479,34 +499,35 @@ void Commands::booksFind(const char* option, const char* str) {
 
 // INSERTION SORT
 void Commands::booksSort(const char* option, const char* order) {
-    unsigned size = library.getSize();
 
-    Book* sorted = new Book[size];
-
-    const Book* books = library.getBooks();
-
-    for(size_t i = 0; i < size; i++){
-        sorted[i] = books[i];
+    if(!isLogged()){
+        std::cout << "Please login to use this command!\n";
+        return;
     }
 
+    unsigned size = library.getSize();
+
+    Book* books = library.getBook();
+
     for(size_t i = 1; i < size; i++) {
-        Book key = sorted[i];
+
+        Book temp = books[i];
         int j = i - 1;
 
         while(j >= 0) {
             bool condition = false;
 
             if(strcmp(option, "title") == 0) {
-                condition = strcmp(sorted[j].getTitle(), key.getTitle()) > 0;
+                condition = strcmp(books[j].getTitle(), temp.getTitle()) > 0;
             }
             else if(strcmp(option, "author") == 0) {
-                condition = strcmp(sorted[j].getAuthor(), key.getAuthor()) > 0;
+                condition = strcmp(books[j].getAuthor(), temp.getAuthor()) > 0;
             }
             else if(strcmp(option, "year") == 0) {
-                condition = sorted[j].getYear() > key.getYear();
+                condition = books[j].getYear() > temp.getYear();
             }
             else if(strcmp(option, "rating") == 0){
-                condition = sorted[j].getRating() > key.getRating();
+                condition = books[j].getRating() > temp.getRating();
             }
 
             if(strcmp(order, "desc") == 0) {
@@ -515,26 +536,18 @@ void Commands::booksSort(const char* option, const char* order) {
 
             if(!condition) break;
 
-            sorted[j + 1] = sorted[j];
+            books[j + 1] = books[j];
             j--;
         }
-        sorted[j + 1] = key;
+        books[j + 1] = temp;
     }
-
-    for(size_t i = 0; i < size; i++){
-        std::cout << sorted[i].getTitle() << "|"
-                  << sorted[i].getAuthor() << "|"
-                  << sorted[i].getYear() << "|"
-                  << sorted[i].getRating() << std::endl;
-    }
-
-    delete[] sorted;
+    std::cout << "Books sorted!\n";
 }
 
 //                  USER
 
 void Commands::userAdd() {
-    if(!currentUser || !currentUser->isAdmin()){
+    if(!isAdmin()){
         std::cout << "Admin only\n";
         return;
     }
@@ -567,7 +580,7 @@ void Commands::userAdd() {
 }
 
 void Commands::userRemove() {
-    if(!currentUser || !currentUser->isAdmin()){
+    if(!isAdmin()){
         std::cout << "Admin only!\n";
         return;
     }
