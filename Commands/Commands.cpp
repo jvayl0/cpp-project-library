@@ -11,10 +11,6 @@
 #include <fstream>
 #include <cstring>
 
-//FOR PASSWORD READER
-#include <termios.h>
-#include <unistd.h>
-
 
 // CASE IGNORE HELPERS
 namespace {
