@@ -205,16 +205,16 @@ void Commands::help() {
         << "BOOKS (CLIENT):\n"
         << "books all       - lists all books\n"
         << "books info <id> - shows book details\n"
-        << "books find ...  - searches books\n"
-        << "books sort ...  - sorts books\n\n"
+        << "books find <option> <string>   - searches books\n"
+        << "books sort <option> <asc/desc>  - sorts books\n\n"
 
         << "BOOKS (ADMIN ONLY):\n"
         << "books add       - adds new book\n"
         << "books remove    - removes book\n\n"
 
         << "USERS (ADMIN ONLY):\n"
-        << "users add       - adds new user\n"
-        << "users remove    - removes user\n\n"
+        << "user add       - adds new user\n"
+        << "user remove    - removes user\n\n"
 
         << "SYSTEM:\n"
         << "help            - shows this help\n"
