@@ -13,3 +13,11 @@ int main() {
 
     return 0;
 }
+
+// g++ -std=c++17 main.cpp \
+Commands/*.cpp \
+FileParsers/*.cpp \
+User/*.cpp \
+Library/*.cpp \
+-I. \
+-o app
