@@ -385,6 +385,12 @@ void Commands::booksRemove() {
 }
 
 void Commands::booksInfo(unsigned id) {
+
+    if(!isLogged()){
+        std::cout << "Please login to use this command!\n";
+        return;
+    }
+
     Book* book = library.getBookById(id);
 
     if(!book){

@@ -1,0 +1,2 @@
+admin|admin|i<3c++
+client|kmet|123
