@@ -1,2 +1,3 @@
 admin|admin|i<3c++
-client|kmet|123
+client|ivo|123
+client|pesho|456
