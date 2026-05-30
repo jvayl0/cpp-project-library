@@ -466,36 +466,57 @@ void Commands::booksSort(const char* option, const char* order) {
         return;
     }
 
-    unsigned size = library.getSize();
+    bool ascending = strcmp(order, "asc") == 0;
+    bool descending = strcmp(order, "desc") == 0;
 
+    if(!ascending && !descending){
+        std::cout << "Invalid order\n";
+        return;
+    }
+
+    unsigned size = library.getSize();
     Book* books = library.getBook();
 
-    for(size_t i = 1; i < size; i++) {
+    for(size_t i = 1; i < size; i++){
 
         Book temp = books[i];
         int j = i - 1;
 
-        while(j >= 0) {
-            bool condition = false;
+        while(j >= 0){
+            int check = 0;
 
-            if(strcmp(option, "title") == 0) {
-                condition = strcmp(books[j].getTitle(), temp.getTitle()) > 0;
+            if(strcmp(option, "title") == 0){
+                check = strcmp(books[j].getTitle(), temp.getTitle());
             }
-            else if(strcmp(option, "author") == 0) {
-                condition = strcmp(books[j].getAuthor(), temp.getAuthor()) > 0;
+            else if (strcmp(option, "author") == 0){
+                check = strcmp(books[j].getAuthor(), temp.getAuthor());
             }
-            else if(strcmp(option, "year") == 0) {
-                condition = books[j].getYear() > temp.getYear();
+            else if (strcmp(option, "year") == 0){
+                if(books[j].getYear() > temp.getYear()){
+                    check = 1;
+                }
+                else if (books[j].getYear() < temp.getYear()){
+                    check = -1;
+                }
             }
-            else if(strcmp(option, "rating") == 0){
-                condition = books[j].getRating() > temp.getRating();
+            else if (strcmp(option, "rating") == 0 ){
+                if(books[j].getRating() > temp.getRating()){
+                    check = 1;
+                }
+                else if(books[j].getRating() < temp.getRating()){
+                    check = -1;
+                }
+            }
+            else {
+                std::cout << "Invalid option!\n";
+                return;
             }
 
-            if(strcmp(order, "desc") == 0) {
-                condition = !condition;
-            }
+            bool shift = ascending ? (check > 0) : (check < 0);
 
-            if(!condition) break;
+            if(!shift){
+                break;
+            }
 
             books[j + 1] = books[j];
             j--;

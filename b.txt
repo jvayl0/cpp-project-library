@@ -1,5 +1,5 @@
-3|J.K. Rowling|Harry Potter and the Philosopher's Stone|Fantasy|Wizard boy starts his journey|1997|9.2|magic wizard school fantasy
-2|Stephen King|It|Horror|Evil clown in small town|1986|8.7|clown horror thriller pennywise
-4|Frank Herbert|Dune|Sci-Fi|Desert planet politics and spice|1965|9|desert spice empire sci-fi politics
 5|Harper Lee|To Kill a Mockingbird|Drama|Racism and justice in the south|1960|9.1|justice racism law classic
+2|Stephen King|It|Horror|Evil clown in small town|1986|8.7|clown horror thriller pennywise
+3|J.K. Rowling|Harry Potter and the Philosopher's Stone|Fantasy|Wizard boy starts his journey|1997|9.2|magic wizard school fantasy
+4|Frank Herbert|Dune|Sci-Fi|Desert planet politics and spice|1965|9|desert spice empire sci-fi politics
 1|George Orwell|1984|Dystopia|Big Brother is watching|1949|9.5|classic politics totalitarian
